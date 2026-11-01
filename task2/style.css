@@ -124,3 +124,9 @@ h1 { margin: 0 0 4px; text-align: center; font-size: 26px; }
 .pc-moves { padding: 4px 14px 14px; display: flex; flex-direction: column; gap: 5px; }
 .pc-moves .move-btn { text-align: left; }
 .pc-title { font-size: 12px; font-weight: 700; color: #6b5444; padding: 4px 14px 0; }
+
+/* hover tip (appears when the mouse stays on an avatar) */
+.tip { position: absolute; z-index: 950; max-width: 230px; padding: 8px 11px; border-radius: 8px;
+       background: #2b1d14; color: #fff; font-size: 13px; line-height: 1.45; pointer-events: none;
+       box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+.tip b { font-size: 15px; }

@@ -1,4 +1,17 @@
-
+/* ------------------------------------------------------------------
+   Task 2. The party in motion
+   Parts of this file
+     A. building the page            (same idea as Task 1)
+     B. helpers that stop animations (so fast clicks leave no queues)
+     C. Spotlight + Clear
+     D. Guest card (profile)
+     E. Move a guest to another room
+     F. Sort by time
+     G. start-up and event handlers
+   Animation queues used (so effects never break each other):
+     'fx'    (default) - fades, jumps, profile grow/shrink, gaps
+     'slide'            - cards sliding to new places (sort)
+   ------------------------------------------------------------------ */
 
 var CARD_W = 72, CARD_M = 2;     // width and side margin of a card (see CSS)
 var PW = 280;                    // final width of the guest card
@@ -6,7 +19,7 @@ var sortedRooms = {};            // roomId -> true when the room is sorted by ti
 var dirty = false;               // true after case 18 / 19 changed only the page
 var moves = [];                  // moves that are flying right now
 
-
+/* ============================ A. BUILD ============================ */
 
 function toMinutes(time) {
   var p = time.split(':');
@@ -97,6 +110,7 @@ function cancelEverything() {
   moves = [];
   $('.guest, .gap, .leaving, .hop, .room').stop('fx', true).stop('slide', true);
   $('.fly').remove();
+  tipHide();
   resetProfile();
 }
 
@@ -288,6 +302,7 @@ function startMove(name, toId) {
   var $g = $('.guest[data-name="' + name + '"]');
   if (!$g.length || $g.attr('data-room') === toId) return;
 
+  tipHide();
   // 1. change the ARRAY at once, so the cases find the guest in the new room
   var rec = takeFromArray(name) || recordFromDom($g);
   getRoom(toId).guests.push(rec);
@@ -366,6 +381,41 @@ function layoutRoom(roomId) {
   $cards.animate({ left: 0, top: 0 }, { duration: 700, queue: 'slide' }).dequeue('slide');   // 4) slide
 }
 
+
+/* ========================== H. HOVER TIP ========================== */
+/* Mouse stays on an avatar (no click): a small tip with the information.
+   Only one tip exists at a time; it is removed when the mouse leaves,
+   when a card opens, when a guest moves or when the page is rebuilt.   */
+
+var $tip = null;
+
+function tipHide() {
+  if ($tip) { $tip.stop(true).remove(); $tip = null; }
+}
+
+function tipShow($g) {
+  tipHide();
+  if (profile.state !== 'closed') return;              // a card is open: no tips
+  var d = guestInfo($g);
+  var things = $.map(d.things, function (t) { return THING_WORDS[t]; });
+
+  $tip = $('<div class="tip">')
+    .append($('<b>').text(d.name))
+    .append($('<div>').text('Came at ' + d.time + (d.aitu ? ' · AITU student' : ' · not AITU')))
+    .append($('<div>').text(things.length ? 'Has ' + joinWords(things) : 'Came with nothing'))
+    .append($('<div>').text('Wears ' + d.color))
+    .appendTo('body');
+
+  // place it above the avatar, centered; if there is no room above, below
+  var $av = $g.find('.avatar-wrap'), o = $av.offset();
+  var w = $tip.outerWidth(), h = $tip.outerHeight(), $w = $(window);
+  var left = Math.max($w.scrollLeft() + 4, Math.min(o.left + $av.outerWidth() / 2 - w / 2,
+                      $w.scrollLeft() + $w.width() - w - 4));
+  var top = o.top - h - 8;
+  if (top < $w.scrollTop() + 4) top = o.top + $av.outerHeight() + 8;
+  $tip.css({ left: left, top: top }).hide().fadeIn(120);
+}
+
 /* ======================== G. START-UP / EVENTS ======================== */
 
 $(function () {
@@ -389,9 +439,14 @@ $(function () {
     layoutRoom(id);
   });
 
+  // hover on an avatar: show / hide the tip
+  $('#house').on('mouseenter', '.guest .avatar-wrap', function () { tipShow($(this).closest('.guest')); });
+  $('#house').on('mouseleave', '.guest .avatar-wrap', tipHide);
+
   // click a guest: open (or close) the guest card
   $('#house').on('click', '.guest', function (e) {
     e.stopPropagation();                             // so the "click outside" handler does not run
+    tipHide();
     var name = $(this).attr('data-name');
     profile.wanted = (profile.wanted === name) ? null : name;
     profileSync();
