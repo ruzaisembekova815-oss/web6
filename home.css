@@ -1,0 +1,17 @@
+* { box-sizing: border-box; }
+body { margin: 0; padding: 40px 14px; font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+       background: #efe3c9; color: #2b1d14; }
+header { text-align: center; margin-bottom: 26px; }
+h1 { margin: 0 0 6px; font-size: 28px; }
+header p { margin: 0; color: #6b5444; }
+#tasks { max-width: 620px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.task { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: #fff;
+        border-radius: 12px; text-decoration: none; color: inherit;
+        box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.task:hover { background: #fff3c4; }
+.num { flex: none; width: 36px; height: 36px; border-radius: 50%; background: #4a2f23; color: #fff;
+       text-align: center; line-height: 36px; font-weight: 700; }
+.body b { display: block; font-size: 17px; }
+.body small { color: #6b5444; font-size: 14px; }
+footer { text-align: center; margin-top: 26px; }
+footer a { color: #b3412c; }
