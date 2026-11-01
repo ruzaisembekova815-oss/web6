@@ -1,0 +1,22 @@
+{
+ "1": "Case 1: Who is in the hall? | Found: 6 guests — Arman, Sophia, Dias, Bekzat, Aruzhan, Saule",
+ "2": "Case 2: Dressed in yellow or purple | Found: 6 guests — Arman, Sophia, Bekzat, Sergey, Natasha, Inkar",
+ "3": "Case 3: AITU students upstairs | Found: 5 guests — Aigerim, Ivan, Sophia, Dias, Aruzhan",
+ "4": "Case 4: Glasses or a bag | Found: 10 guests — Madina, Arman, Bekzat, Saule, Emma, Timur, Yerlan, Daniel, Zarina, Inkar",
+ "5": "Case 5: Came with nothing | Found: 3 guests — Dias, Sergey, Natasha",
+ "6": "Case 6: A phone but no bag | Found: 6 guests — Aliya, Sophia, Aruzhan, Nurlan, Yerlan, Askar",
+ "7": "Case 7: Arrived 20:30 – 21:00 | Found: 6 guests — Aigerim, Arman, Bekzat, Sergey, Natasha, Askar",
+ "8": "Case 8: After 21:00, not AITU | Found: 4 guests — Aliya, Madina, Saule, Zarina",
+ "9": "Case 9: Right next to Askar | Found: 2 guests — Natasha, Inkar",
+ "10": "Case 10: Last in each room | Found: 4 guests — Ivan, Saule, Kamila, Inkar",
+ "11": "Case 11: Third in each room | Found: 4 guests — Madina, Dias, Timur, Natasha",
+ "12": "Case 12: After Timur | Found: 3 guests — Sergey, Yerlan, Kamila",
+ "13": "Case 13: Right before someone in black | Found: 6 guests — Aigerim, Madina, Bekzat, Nurlan, Yerlan, Natasha",
+ "14": "Case 14: Room of Aruzhan | Found: 1 room — Hall",
+ "15": "Case 15: Rooms with &lt; 6 guests | Found: 2 rooms — Balcony, Living room",
+ "16": "Case 16: Cup, but no glasses (rooms) | Found: 1 room — Balcony",
+ "17": "Case 17: First to come to each room | Found: 4 guests — Ivan, Dias, Nurlan, Daniel",
+ "18": "Case 18: Miras joins Askar and Inkar | Found: 1 guest — Miras",
+ "19": "Case 19: Natasha goes home | Found: 1 guest — Natasha",
+ "20": "Case 20: Who took the cake? | Found: 1 guest — Zarina"
+}

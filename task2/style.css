@@ -1,0 +1,126 @@
+/* NOTE: no CSS transitions and no CSS animations anywhere (assignment rule).
+   All movement is done with jQuery. */
+:root {
+  --red: #e0505a; --blue: #3b6fd8; --green: #2e9a5b;
+  --black: #2a2a2a; --yellow: #f0b323; --purple: #8a55c7;
+  --wood: #4a2f23; --brick: #8a4a35; --paper: #fbf6ea;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 18px 12px 40px;
+  font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #efe3c9; color: #2b1d14;
+}
+h1 { margin: 0 0 4px; text-align: center; font-size: 26px; }
+.sub { margin: 0 0 14px; text-align: center; color: #6b5444; }
+
+/* ---------- control panel ---------- */
+#panel { max-width: 1080px; margin: 0 auto 14px; background: #fff; border-radius: 12px;
+         padding: 12px 14px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+#cases, #tools { display: flex; flex-wrap: wrap; gap: 6px; }
+#tools { margin-bottom: 8px; }
+.case-btn, .tool-btn, .sort-btn, .move-btn {
+  font: inherit; font-size: 13px; cursor: pointer; border: 1px solid #c9b79a;
+  background: #f7efe0; border-radius: 8px; padding: 5px 9px; color: #2b1d14;
+}
+.case-btn:hover, .tool-btn:hover, .sort-btn:hover, .move-btn:hover { background: #ffe9a8; }
+.case-btn b { display: inline-block; min-width: 20px; color: #b3412c; }
+#result { margin-top: 10px; display: flex; gap: 14px; align-items: flex-start; }
+#result-text { flex: 0 0 340px; margin: 0; font-size: 15px; min-height: 40px; }
+#result-text .count { font-weight: 700; color: #b3412c; }
+#chain { flex: 1; margin: 0; padding: 8px 10px; background: #2b2b33; color: #e7e7ef;
+         border-radius: 8px; font-size: 12px; line-height: 1.4; overflow-x: auto; min-height: 40px; }
+
+/* ---------- house ---------- */
+#house-wrap { width: 1060px; margin: 0 auto; }
+#roof { position: relative; height: 96px; background: var(--brick);
+        clip-path: polygon(0 100%, 50% 0, 100% 100%); }
+#roof-bar { height: 10px; background: var(--wood); margin-top: -10px; position: relative; }
+#sign { position: relative; z-index: 2; width: 270px; margin: -52px auto 8px; text-align: center;
+        background: var(--paper); border: 4px solid var(--wood); border-radius: 10px;
+        padding: 6px 0; font-weight: 800; }
+#house { border: 6px solid var(--wood); border-top: none; background: var(--paper); }
+.floor { display: flex; border-top: 6px solid var(--wood); }
+.floor:first-child { border-top: none; }
+.floor-label { flex: 0 0 34px; background: #e6cfa6; color: var(--wood); font-weight: 800;
+               letter-spacing: 3px; font-size: 13px; display: flex; align-items: center;
+               justify-content: center; border-right: 6px solid var(--wood); }
+.floor-label span { writing-mode: vertical-rl; transform: rotate(180deg); }
+.room { position: relative; flex: 1; min-width: 0; padding: 8px 10px 10px; min-height: 170px; }
+.room + .room { border-left: 6px solid var(--wood); }
+#room-balcony { background: #dfeaf6; }
+#room-hall { background: #faf0dc; }
+#room-kitchen { background: #fdf9ee; }
+#room-living { background: #fffaf0; }
+.room h3 { margin: 0 0 6px; font-size: 16px; }
+.room-head { display: flex; justify-content: space-between; align-items: center; }
+.room.found { outline: 4px solid #ff3b6b; outline-offset: -4px; background: #fff0a8; }
+
+.guests { display: flex; flex-wrap: wrap; align-items: flex-start; min-height: 112px; }
+
+/* ---------- guest card ---------- */
+.card { position: relative; flex: none; width: 72px; margin: 0 2px 4px; text-align: center;
+        border-radius: 10px; padding: 2px 0 4px; }
+.hop { position: relative; }              /* the layer that jumps */
+.avatar-wrap { position: relative; width: 56px; height: 56px; margin: 0 auto; border-radius: 50%;
+               border: 4px solid #999; background: #fff; }
+.avatar { display: block; width: 48px; height: 48px; border-radius: 50%; }
+.color-red    .avatar-wrap { border-color: var(--red); }
+.color-blue   .avatar-wrap { border-color: var(--blue); }
+.color-green  .avatar-wrap { border-color: var(--green); }
+.color-black  .avatar-wrap { border-color: var(--black); }
+.color-yellow .avatar-wrap { border-color: var(--yellow); }
+.color-purple .avatar-wrap { border-color: var(--purple); }
+.badge { position: absolute; right: -8px; top: -6px; width: 22px; height: 22px; border-radius: 50%;
+         background: #1f4f9c; color: #fff; font-size: 12px; line-height: 22px; text-align: center;
+         border: 2px solid #fff; }
+.g-name { font-size: 12px; font-weight: 700; margin-top: 3px; }
+.g-time { font-size: 11px; color: #6b5444; }
+.g-things { height: 18px; font-size: 13px; letter-spacing: 1px; white-space: nowrap; }
+.guest { cursor: default; }
+.guest.found { background: #fff0a8; box-shadow: 0 0 0 3px #ff3b6b; }
+
+/* ---------- legend ---------- */
+#ground { height: 14px; background: #6bb04a; border-radius: 0 0 6px 6px; }
+#legend { margin-top: 10px; background: #fff; border: 4px solid var(--wood); border-radius: 12px;
+          padding: 8px 14px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+          font-size: 13px; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 3px; }
+.dot.red { background: var(--red); } .dot.blue { background: var(--blue); }
+.dot.green { background: var(--green); } .dot.black { background: var(--black); }
+.dot.yellow { background: var(--yellow); } .dot.purple { background: var(--purple); }
+
+/* ================= Task 2 additions ================= */
+.tool-btn { background: #ffe0dc; border-color: #d99b94; font-weight: 700; }
+.sort-btn { font-size: 12px; padding: 3px 8px; }
+.sort-btn.active { background: #cfe8ff; border-color: #6fa5d6; font-weight: 700; }
+.guest { cursor: pointer; }
+.guest:hover .avatar-wrap { box-shadow: 0 0 0 3px rgba(0,0,0,.18); }
+
+/* gap = the empty place that opens in the new room; leaving = the place that closes */
+.gap { flex: none; height: 1px; overflow: hidden; }
+.leaving { visibility: hidden; overflow: hidden; }
+
+/* flying copy of a card (moves over the whole house) */
+.fly { position: absolute; z-index: 900; margin: 0; pointer-events: none; }
+
+/* guest profile card: grows out of the avatar */
+.profile { position: absolute; z-index: 1000; box-sizing: border-box; overflow: hidden;
+           background: #fff; border: 4px solid #999; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.profile.closing { pointer-events: none; }
+.profile.color-red { border-color: var(--red); }
+.profile.color-blue { border-color: var(--blue); }
+.profile.color-green { border-color: var(--green); }
+.profile.color-black { border-color: var(--black); }
+.profile.color-yellow { border-color: var(--yellow); }
+.profile.color-purple { border-color: var(--purple); }
+.pc-photo { position: absolute; left: 0; top: 0; width: 48px; height: 48px; border-radius: 50%; display: block; }
+.pc-rest { width: 272px; }                      /* fixed width: text does not re-wrap while growing */
+.pc-head { height: 68px; padding: 12px 10px 0 70px; }
+.pc-name { font-size: 20px; font-weight: 800; }
+.pc-sub { font-size: 12px; color: #6b5444; }
+.pc-lines { margin: 0; padding: 0 14px 6px 14px; list-style: none; font-size: 14px; line-height: 1.6; }
+.pc-lines li::before { content: "• "; color: #b3412c; }
+.pc-moves { padding: 4px 14px 14px; display: flex; flex-direction: column; gap: 5px; }
+.pc-moves .move-btn { text-align: left; }
+.pc-title { font-size: 12px; font-weight: 700; color: #6b5444; padding: 4px 14px 0; }
